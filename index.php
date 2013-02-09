@@ -76,11 +76,11 @@
       box-shadow:0 0 5px rgba(0,0,0,0.35);
     }
     a.rotate i, a[data-rotate] i {
-      -webkit-transition: all 0.3s linear;
-      -moz-transition: all 0.3s linear;
-      -mx-transition: all 0.3s linear;
-      -o-transition: all 0.3s linear;
-      transition: all 0.3s linear;
+      -webkit-transition: all 0.15s linear;
+      -moz-transition: all 0.15s linear;
+      -mx-transition: all 0.15s linear;
+      -o-transition: all 0.15s linear;
+      transition: all 0.15s linear;
     }
     .rotate-90-ctr    {
       -webkit-transform: rotate(-90deg);
