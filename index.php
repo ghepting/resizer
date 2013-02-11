@@ -179,6 +179,7 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
     });
   </script>
   <div id="resizer">
+    <a id="openHome" class="pull-left" title="Resizer Home" href="./"><i class="icon-home"></i></a>
     <ul class="button-list pull-left">
       <li><a class="active" title="Desktop" href="#" data-viewport-width="100%" data-viewport-height="100%"><i class="icon-desktop"></i></a></li>
       <li><a title="13&quot; MacBook" href="#" data-viewport-width="1280px" data-viewport-height="800px"><i class="icon-laptop"></i></a></li>
@@ -186,7 +187,7 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
       <li><a title="Mobile Phone" href="#" data-rotate="true" data-viewport-width="360px" data-viewport-height="640px"><i class="icon-mobile-phone"></i></a></li>
       <li><a title="Rotate" href="#" class="rotate"><i class="icon-refresh"></i></a></li>
     </ul>
-    <a id="closeResizer" class="pull-left" title="Close Resizer" href="./home.html"><i class="icon-remove"></i></a>
+    <a id="closeResizer" class="pull-left" title="Close Resizer" href="./"><i class="icon-remove"></i></a>
   </div>
   <iframe id="resizerFrame" src="<?php echo $url ?>"></iframe>
 <?php
