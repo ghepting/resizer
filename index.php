@@ -18,12 +18,6 @@
   <!--[if IE 7]>
   <link type="text/css" rel="stylesheet" href="http://groundwork.sidereel.com/css/font-awesome-ie7.min.css">
   <![endif]-->
-  <script type="text/javascript">
-    Modernizr.load({
-      test: Modernizr.svg,
-      nope: 'http://groundwork.sidereel.com/css/groundy/no-svg.css'
-    });
-  </script>
 </head>
 <body>
 
@@ -52,11 +46,11 @@
       position:fixed;
       top:0;
       z-index:99;
-      width:300px;
+      width:350px;
       left:50%;
       height:2em;
       margin:0 auto;
-      margin-left:-150px;
+      margin-left:-175px;
     }
     #resizer ul {
       -webkit-filter: drop-shadow(0 1px 5px rgba(0,0,0,.25));
@@ -109,7 +103,14 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
       <div class="row">
         <div class="one whole tripple padded">
           <h1 class="responsive" data-compression="8">Enter URL</h1>
-          <p><input type="text" name="url" placeholder="http://www.example.com" /></p>
+          <div class="row">
+            <div class="four mobile fifths">
+              <p><input type="text" name="url" placeholder="http://www.example.com" /></p>
+            </div>
+            <div class="one mobile fifth pad-left">
+              <p><input type="submit" value="Go" /></p>
+            </div>
+          </div>
           <p><small>Another open-source project by <a href="http://garyhepting.com/">Gary Hepting</a></small></p>
         </div>
       </div>
@@ -118,11 +119,36 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
 <?php
 }else{
   $url = $_REQUEST['url'];
-  if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+  if (!preg_match("~https?://~i", $url)) {
     $url = "http://" . $url;
   }
 ?>
   <script type="text/javascript">
+    function querystring(key) {
+      var re=new RegExp('(?:\\?|&)'+key+'=(.*?)(?=&|$)','gi');
+      var r=[], m;
+      while ((m=re.exec(document.location.search)) != null) r.push(m[1]);
+      return r;
+    }
+    function basename(str) {
+      var base = new String(str).substring(str.lastIndexOf('/') + 1);
+      if(base.lastIndexOf(".") != -1) {
+        base = base.substring(0, base.lastIndexOf("."));
+      }
+      return base;
+    }
+    function updateQueryStringParameter(uri, key, value) {
+      var re = new RegExp("([?|&])" + key + "=.*?(&|$)", "i");
+      separator = uri.indexOf('?') !== -1 ? "&" : "?";
+      var url = window.location.href;
+      if (uri.match(re)) {
+        url = uri.replace(re, '$1' + key + "=" + value + '$2');
+      }
+      else {
+        url = uri + separator + key + "=" + value;
+      }
+      return url;
+    }
     $(document).ready(function() {
       $('#resizerFrame').each(function() {
         $(this).css('max-width',$(window).width());
@@ -142,6 +168,7 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
         $('a[data-viewport-width]').removeClass('active');
         $(this).addClass('active');
         $('#resizerFrame').stop().animate({'max-width': newWidth, 'max-height': newHeight}, 200);
+        $('title').text('W: '+newWidth+', H: '+newHeight);
         e.preventDefault();
         return false;
       });
@@ -170,6 +197,18 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
         e.preventDefault();
         return false;
       });
+      // if(querystring('url').length > 0) {
+      //   $('#resizerFrame').attr('src',querystring('url'));
+      // }
+      $('#resizerFrame').on('load', function() {
+        var url = $(this).attr('src');
+        if(!url.toLowerCase().match('^https?://')) {
+          url = "http://" + url;
+        }
+        var href = updateQueryStringParameter(document.location.href, 'url', url);
+        var stateObj = { resizer: 'resizer' };
+        history.pushState(stateObj, url, href);
+      });
     });
     $(window).resize(function() {
       if($('#resizer li:first-child a').hasClass('active')) {
@@ -181,10 +220,11 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
   <div id="resizer">
     <a id="openHome" class="pull-left" title="Resizer Home" href="./"><i class="icon-home"></i></a>
     <ul class="button-list pull-left">
-      <li><a class="active" title="Desktop" href="#" data-viewport-width="100%" data-viewport-height="100%"><i class="icon-desktop"></i></a></li>
+      <li><a class="active" title="Fullscreen" href="#" data-viewport-width="100%" data-viewport-height="100%"><i class="icon-fullscreen"></i></a></li>
+      <li><a title="Desktop" href="#" data-viewport-width="1920" data-viewport-height="1080"><i class="icon-desktop"></i></a></li>
       <li><a title="13&quot; MacBook" href="#" data-viewport-width="1280px" data-viewport-height="800px"><i class="icon-laptop"></i></a></li>
-      <li><a title="Small Tablet" href="#" data-rotate="true" data-viewport-width="600px" data-viewport-height="1024px"><i class="icon-tablet"></i></a></li>
-      <li><a title="Mobile Phone" href="#" data-rotate="true" data-viewport-width="360px" data-viewport-height="640px"><i class="icon-mobile-phone"></i></a></li>
+      <li><a title="Small Tablet" href="#" data-rotate="true" data-viewport-width="720px" data-viewport-height="1280px"><i class="icon-tablet"></i></a></li>
+      <li><a title="Mobile Phone" href="#" data-rotate="true" data-viewport-width="480px" data-viewport-height="720px"><i class="icon-mobile-phone"></i></a></li>
       <li><a title="Rotate" href="#" class="rotate"><i class="icon-refresh"></i></a></li>
     </ul>
     <a id="closeResizer" class="pull-left" title="Close Resizer" href="./"><i class="icon-remove"></i></a>
