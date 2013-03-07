@@ -14,7 +14,7 @@
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
   <script type="text/javascript">window.jQuery || document.write('<script src="http://groundwork.sidereel.com/js/libs/jquery-1.8.2.min.js"><\/script>')</script>
   <!-- Groundwork CSS -->
-  <link type="text/css" rel="stylesheet" href="http://groundwork.sidereel.com/css/groundwork.css">
+  <link type="text/css" rel="stylesheet" href="http://groundwork.sidereel.com/groundwork/lib/assets/css/groundwork.css">
   <!--[if IE 7]>
   <link type="text/css" rel="stylesheet" href="http://groundwork.sidereel.com/css/font-awesome-ie7.min.css">
   <![endif]-->
@@ -229,7 +229,7 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
     </ul>
     <a id="closeResizer" class="pull-left" title="Close Resizer" href="./"><i class="icon-remove"></i></a>
   </div>
-  <iframe id="resizerFrame" src="<?php echo $url ?>"></iframe>
+  <iframe id="resizerFrame" src="<?php echo $url ?>" frameborder="0"></iframe>
 <?php
 }
 ?>
