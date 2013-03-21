@@ -9,14 +9,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
   <title>Viewport Resizer for Testing Responsive Web Design</title>
   <!-- Modernizr -->
-  <script src="http://groundwork.sidereel.com/js/libs/modernizr-2.6.2.min.js"></script>
+  <script src="http://groundwork.sidereel.com/groundwork/js/libs/modernizr-2.6.2.min.js"></script>
   <!-- jQuery -->
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-  <script type="text/javascript">window.jQuery || document.write('<script src="http://groundwork.sidereel.com/js/libs/jquery-1.8.2.min.js"><\/script>')</script>
+  <script type="text/javascript">window.jQuery || document.write('<script src="http://groundwork.sidereel.com/groundwork/js/libs/jquery-1.8.2.min.js"><\/script>')</script>
   <!-- Groundwork CSS -->
-  <link type="text/css" rel="stylesheet" href="http://groundwork.sidereel.com/groundwork/lib/assets/css/groundwork.css">
+  <link type="text/css" rel="stylesheet" href="http://groundwork.sidereel.com/groundwork/css/groundwork.css">
   <!--[if IE 7]>
-  <link type="text/css" rel="stylesheet" href="http://groundwork.sidereel.com/css/font-awesome-ie7.min.css">
+  <link type="text/css" rel="stylesheet" href="http://groundwork.sidereel.com/groundwork/css/font-awesome-ie7.min.css">
   <![endif]-->
 </head>
 <body>
@@ -234,8 +234,7 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
 }
 ?>
   <!-- scripts -->
-  <script type="text/javascript" src="http://groundwork.sidereel.com/js/plugins/jquery.orbit-1.4.0.js"></script>
-  <script type="text/javascript" src="http://groundwork.sidereel.com/js/groundwork.js"></script>
+  <script type="text/javascript" src="http://groundwork.sidereel.com/groundwork/js/groundwork.all.js"></script>
 
   <!-- google analytics -->
   <script type="text/javascript">
