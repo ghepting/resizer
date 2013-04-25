@@ -46,11 +46,11 @@
       position:fixed;
       top:0;
       z-index:99;
-      width:350px;
+      width:450px;
       left:50%;
       height:2em;
       margin:0 auto;
-      margin-left:-175px;
+      margin-left:-225px;
     }
     #resizer ul {
       -webkit-filter: drop-shadow(0 1px 5px rgba(0,0,0,.25));
@@ -91,7 +91,7 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
     <form action="<?php $_SERVER['PHP_SELF']?>" method="get">
       <div class="row">
         <div class="one whole tripple padded">
-          <h3 class="responsive" data-compression="4">
+          <h3 class="responsive" data-compression="4.3">
             <i class="icon-desktop"></i> 
             <i class="icon-laptop"></i> 
             <i class="icon-tablet"></i> 
@@ -108,7 +108,7 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
               <p><input type="text" name="url" placeholder="http://www.example.com" /></p>
             </div>
             <div class="one mobile fifth pad-left">
-              <p><input type="submit" value="Go" /></p>
+              <p><input type="submit" class="info" value="Go" /></p>
             </div>
           </div>
           <p><small>Another open-source project by <a href="http://garyhepting.com/">Gary Hepting</a></small></p>
@@ -124,19 +124,8 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
   }
 ?>
   <script type="text/javascript">
-    function querystring(key) {
-      var re=new RegExp('(?:\\?|&)'+key+'=(.*?)(?=&|$)','gi');
-      var r=[], m;
-      while ((m=re.exec(document.location.search)) != null) r.push(m[1]);
-      return r;
-    }
-    function basename(str) {
-      var base = new String(str).substring(str.lastIndexOf('/') + 1);
-      if(base.lastIndexOf(".") != -1) {
-        base = base.substring(0, base.lastIndexOf("."));
-      }
-      return base;
-    }
+
+    // function to update query string params
     function updateQueryStringParameter(uri, key, value) {
       var re = new RegExp("([?|&])" + key + "=.*?(&|$)", "i");
       separator = uri.indexOf('?') !== -1 ? "&" : "?";
@@ -149,11 +138,18 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
       }
       return url;
     }
+
+    var stateObj = { resizer: 'resizer' };
+
     $(document).ready(function() {
+
+      // set maximum dimensions of display frame
       $('#resizerFrame').each(function() {
         $(this).css('max-width',$(window).width());
         $(this).css('max-height',$(window).height());
       });
+
+      // change display frame size
       $('a[data-viewport-width]').on('click', function(e) {
         if($(this).attr('data-viewport-width') == '100%') {
           newWidth = $(window).width();
@@ -169,9 +165,14 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
         $(this).addClass('active');
         $('#resizerFrame').stop().animate({'max-width': newWidth, 'max-height': newHeight}, 200);
         $('title').text('W: '+newWidth+', H: '+newHeight);
+        var size = $('#resizer').find('a.active').attr('data-title');
+        var href = updateQueryStringParameter(document.location.href, 'size', size);
+        history.pushState(stateObj, document.location.href, href);
         e.preventDefault();
         return false;
       });
+
+      // rotate display frame
       $('a.rotate').on('click', function(e) {
         $(this).children('i[class*=icon]').toggleClass('rotate-90-ctr');
         $('a[data-rotate=true]').each(function() {
@@ -185,7 +186,25 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
             $(this).trigger('click');
           }
         });
+        var orientation = $('#resizer').find('.rotate-90-ctr').length > 0 ? 'Landscape' : 'Portrait';
+        var href = updateQueryStringParameter(document.location.href, 'orientation', orientation);
+        history.pushState(stateObj, document.location.href, href);
+        e.preventDefault();
+        return false;
       });
+
+      // set display frame size on page load
+      $('a[data-viewport-width].active').trigger('click');
+<?php
+if($_REQUEST['orientation'] == 'Landscape') {
+?>
+      // set display frame orientation
+      $('a.rotate').trigger('click');
+<?php
+}
+?>
+
+      // close resizer toolbar
       $('#closeResizer').on('click', function(e) {
         newWidth = $(window).width();
         newHeight = $(window).height();
@@ -197,35 +216,40 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
         e.preventDefault();
         return false;
       });
-      // if(querystring('url').length > 0) {
-      //   $('#resizerFrame').attr('src',querystring('url'));
-      // }
+
+      // set display frame source and update url params
       $('#resizerFrame').on('load', function() {
         var url = $(this).attr('src');
         if(!url.toLowerCase().match('^https?://')) {
           url = "http://" + url;
         }
         var href = updateQueryStringParameter(document.location.href, 'url', url);
-        var stateObj = { resizer: 'resizer' };
+        var size = $('#resizer').find('a.active').attr('data-title');
+        href = updateQueryStringParameter(document.location.href, 'size', size);
         history.pushState(stateObj, url, href);
       });
+
     });
+
     $(window).resize(function() {
       if($('#resizer li:first-child a').hasClass('active')) {
         $('#resizerFrame').css('max-width', $(window).width());
         $('#resizerFrame').css('max-height', $(window).height());
       }
     });
+
   </script>
   <div id="resizer">
     <a id="openHome" class="pull-left" title="Resizer Home" href="./"><i class="icon-home"></i></a>
     <ul class="button-list pull-left">
-      <li><a class="active" title="Fullscreen" href="#" data-viewport-width="100%" data-viewport-height="100%"><i class="icon-fullscreen"></i></a></li>
-      <li><a title="Desktop" href="#" data-viewport-width="1920" data-viewport-height="1080"><i class="icon-desktop"></i></a></li>
-      <li><a title="13&quot; MacBook" href="#" data-viewport-width="1280px" data-viewport-height="800px"><i class="icon-laptop"></i></a></li>
-      <li><a title="Small Tablet" href="#" data-rotate="true" data-viewport-width="720px" data-viewport-height="1280px"><i class="icon-tablet"></i></a></li>
-      <li><a title="Mobile Phone" href="#" data-rotate="true" data-viewport-width="480px" data-viewport-height="720px"><i class="icon-mobile-phone"></i></a></li>
-      <li><a title="Rotate" href="#" class="rotate"><i class="icon-refresh"></i></a></li>
+      <li><a class="tooltip <?php echo (empty($_REQUEST['size']) || $_REQUEST['size'] == 'Fullscreen' ? 'active' : '') ?>" title="Fullscreen" href="#" data-viewport-width="100%" data-viewport-height="100%"><i class="icon-fullscreen"></i></a></li>
+      <li><a class="tooltip <?php echo $_REQUEST['size'] == 'Desktop' ? 'active' : '' ?>" title="Desktop" href="#" data-viewport-width="1920" data-viewport-height="1080"><i class="icon-desktop"></i></a></li>
+      <li><a class="tooltip <?php echo $_REQUEST['size'] == 'MacBook' ? 'active' : '' ?>" title="MacBook" href="#" data-viewport-width="1280px" data-viewport-height="800px"><i class="icon-laptop"></i></a></li>
+      <li><a class="tooltip <?php echo $_REQUEST['size'] == 'iPad' ? 'active' : '' ?>" title="iPad" href="#" data-rotate="true" data-viewport-width="768px" data-viewport-height="1024px"><i class="icon-tablet"></i></a></li>
+      <li><a class="tooltip <?php echo $_REQUEST['size'] == 'Android Tablet' ? 'active' : '' ?>" title="Android Tablet" href="#" data-rotate="true" data-viewport-width="720px" data-viewport-height="1280px"><i class="icon-tablet" style="font-size:0.9em;"></i></a></li>
+      <li><a class="tooltip <?php echo $_REQUEST['size'] == 'Android Phone' ? 'active' : '' ?>" title="Android Phone" href="#" data-rotate="true" data-viewport-width="480px" data-viewport-height="720px"><i class="icon-mobile-phone"></i></a></li>
+      <li><a class="tooltip <?php echo $_REQUEST['size'] == 'iPhone' ? 'active' : '' ?>" title="iPhone" href="#" data-rotate="true" data-viewport-width="320px" data-viewport-height="640px"><i class="icon-mobile-phone" style="font-size:0.9em;"></i></a></li>
+      <li><a class="tooltip rotate <?php echo $_REQUEST['orientation'] == 'landscape' ? 'rotate-90-ctr' : '' ?>" title="Toggle Landscape/Portrait" href="#"><i class="icon-refresh"></i></a></li>
     </ul>
     <a id="closeResizer" class="pull-left" title="Close Resizer" href="./"><i class="icon-remove"></i></a>
   </div>
