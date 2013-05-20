@@ -258,6 +258,8 @@ if($_REQUEST['orientation'] == 'Landscape') {
 }
 ?>
   <!-- scripts -->
+  <script type="text/javascript" src="http://groundwork.sidereel.com/groundwork/js/plugins/jquery.cycle2.js"></script>
+  <script type="text/javascript" src="http://groundwork.sidereel.com/groundwork/js/plugins/jquery.magnific-popup.js"></script>
   <script type="text/javascript" src="http://groundwork.sidereel.com/groundwork/js/groundwork.all.js"></script>
 
   <!-- google analytics -->
