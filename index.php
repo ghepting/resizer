@@ -152,12 +152,12 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
       // change display frame size
       $('a[data-viewport-width]').on('click', function(e) {
         if($(this).attr('data-viewport-width') == '100%') {
-          newWidth = $(window).width();
+          newWidth = '100%';
         }else{
           newWidth = $(this).attr('data-viewport-width');
         }
         if($(this).attr('data-viewport-height') == '100%') {
-          newHeight = $(window).height();
+          newHeight = '100%';
         }else{
           newHeight = $(this).attr('data-viewport-height');
         }
@@ -229,13 +229,6 @@ if($_REQUEST['orientation'] == 'Landscape') {
         history.pushState(stateObj, url, href);
       });
 
-    });
-
-    $(window).resize(function() {
-      if($('#resizer li:first-child a').hasClass('active')) {
-        $('#resizerFrame').css('max-width', $(window).width());
-        $('#resizerFrame').css('max-height', $(window).height());
-      }
     });
 
   </script>
