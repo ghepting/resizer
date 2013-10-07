@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-  <title><?= str_replace('http://', '', $_REQUEST['url']) ?></title>
+  <title><?php echo preg_replace('~https?://~i', '', $_REQUEST['url']) ?></title>
   <!-- Modernizr -->
   <script src="http://groundworkcss.github.io/js/libs/modernizr-2.6.2.min.js"></script>
   <!-- jQuery-->
@@ -26,21 +26,21 @@
 </head>
   <style type="text/css">
     html, body {
-      width:100%;
-      height:100%;
-      text-align:center;
-      background:#333 url('http://groundworkcss.github.io/images/black_linen_v2.png') center repeat;
-      overflow:hidden;
-      color:#fff;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      background: #333 url('http://groundworkcss.github.io/images/black_linen_v2.png') center repeat;
+      overflow: hidden;
+      color: #fff;
     }
     #resizerFrame {
-      width:100%;
-      max-width:100%;
-      height:100%;
-      max-height:100%;
-      margin:0 auto;
-      background:white;
-      box-shadow:0 0 50px #000;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      max-height: 100%;
+      margin: 0 auto;
+      background: white;
+      box-shadow: 0 0 50px #000;
       -webkit-transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
       -moz-transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
       -ms-transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
@@ -48,18 +48,13 @@
       transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
     }
     #resizer {
-      position:fixed;
-      top:0;
-      left:0;
-      right:0;
-      z-index:99;
-      width:100%;
-      text-align:center;
-      margin:0 auto;
+      text-align: center;
+      line-height: 1;
     }
     #resizer ul {
       font-size: 17px;
       display: inline-block;
+      margin: -0.2em auto 0;
       -webkit-filter: drop-shadow(0 1px 5px rgba(0,0,0,.25));
       -moz-filter: drop-shadow(0 1px 5px rgba(0,0,0,.25));
       -ms-filter: drop-shadow(0 1px 5px rgba(0,0,0,.25));
@@ -70,7 +65,6 @@
       -moz-transform: translateZ(0);
       -webkit-transform: translateZ(0);
       transform: translateZ(0);
-      margin:-0.2em auto 0;
     }
     button.rotate i:before, button[data-rotate] i:before {
       -webkit-transition: all 0.15s linear;
@@ -88,12 +82,6 @@
     }
   </style>
   <script type="text/javascript">
-    function querystring(key) {
-      var re=new RegExp('(?:\\?|&)'+key+'=(.*?)(?=&|$)','gi');
-      var r=[], m;
-      while ((m=re.exec(document.location.search)) != null) r.push(m[1]);
-      return r;
-    }
     function basename(str) {
       var base = new String(str).substring(str.lastIndexOf('/') + 1);
       if(base.lastIndexOf(".") != -1) {
@@ -158,9 +146,6 @@
         e.preventDefault();
         return false;
       });
-      if(querystring('url').length > 0) {
-        $('#resizerFrame').attr('src',querystring('url'));
-      }
       $('#resizerFrame').on('load', function() {
         var url = basename(this.contentWindow.location.href);
         var stateObj = { resizer: 'resizer' };
@@ -207,20 +192,18 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
     $url = "http://" . $url;
   }
 ?>
-  <div style="position:fixed;top:0;z-index:99;width:100%;">
-    <div id="resizer" class="bounceInDown animated">
-      <ul class="button-group">
-        <li><button class="desktop-only" title="Fullscreen" data-viewport-width="100%" data-viewport-height="100%"><i class="icon-fullscreen"></i></button></li>
-        <li><button class="desktop-only" title="Desktop" data-viewport-width="1920px" data-viewport-height="1080px"><i class="icon-desktop"></i></button></li>
-        <li><button class="desktop-only" title="13 &#39; MacBook Pro" data-viewport-width="1280px" data-viewport-height="800px"><i class="icon-laptop"></i></button></li>
-        <li><button class="hide-on-small-tablet hide-on-mobile" title="iPad" data-rotate="true" data-viewport-width="768px" data-viewport-height="1024px"><i class="icon-tablet"></i></button></li>
-        <li><button class="hide-on-mobile" title="Android Tablet" data-rotate="true" data-viewport-width="720px" data-viewport-height="1280px"><i class="android icon-tablet"></i></button></li>
-        <li><button class="" title="Android Phone" data-rotate="true" data-viewport-width="480px" data-viewport-height="720px"><i class="android icon-mobile-phone"></i></button></li>
-        <li><button class="" title="iPhone" data-rotate="true" data-viewport-width="320px" data-viewport-height="640px"><i class="icon-mobile-phone"></i></button></li>
-        <li><button class="rotate" title="Toggle Landscape/Portrait"><i class="icon-refresh"></i></button></li>
-        <li><button id="closeResizer"><i class="icon-remove"></i></button></li>
-      </ul>
-    </div>
+  <div id="resizer" class="bounceInDown animated">
+    <ul class="button-group">
+      <li><button class="charcoal desktop-only" title="Fullscreen" data-viewport-width="100%" data-viewport-height="100%"><i class="icon-fullscreen"></i></button></li>
+      <li><button class="charcoal desktop-only" title="Desktop" data-viewport-width="1920px" data-viewport-height="1080px"><i class="icon-desktop"></i></button></li>
+      <li><button class="charcoal desktop-only" title="13 &#39; MacBook Pro" data-viewport-width="1280px" data-viewport-height="800px"><i class="icon-laptop"></i></button></li>
+      <li><button class="charcoal hide-on-small-tablet hide-on-mobile" title="iPad" data-rotate="true" data-viewport-width="768px" data-viewport-height="1024px"><i class="icon-tablet"></i></button></li>
+      <li><button class="charcoal hide-on-mobile" title="Android Tablet" data-rotate="true" data-viewport-width="720px" data-viewport-height="1280px"><i class="android icon-tablet"></i></button></li>
+      <li><button class="charcoal" title="Android Phone" data-rotate="true" data-viewport-width="480px" data-viewport-height="720px"><i class="android icon-mobile-phone"></i></button></li>
+      <li><button class="charcoal" title="iPhone" data-rotate="true" data-viewport-width="320px" data-viewport-height="640px"><i class="icon-mobile-phone"></i></button></li>
+      <li><button class="charcoal rotate" title="Toggle Landscape/Portrait"><i class="icon-refresh"></i></button></li>
+      <li><button class="charcoal" id="closeResizer"><i class="icon-remove"></i></button></li>
+    </ul>
   </div>
   <iframe id="resizerFrame" src="<?php echo $url ?>" frameborder="0"></iframe>
 <?php
