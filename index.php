@@ -205,10 +205,8 @@ $iframe_access = (root_url() == iframe_url());
         return false;
       });
 
-      $('#resizerFrame').on('load', function() {
-        var url = basename(this.contentWindow.location.href);
-        var stateObj = { resizer: 'resizer' };
-        history.pushState(stateObj, url, href);
+      $('body').on('click', '[data-toggle="#address-bar"]', function(e) {
+        $($(this).attr('data-toggle')).slideToggle();
       });
 
       if( readCookie('device') ) {
@@ -238,18 +236,18 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
             <i class="icon-tablet"></i> 
             <i class="icon-mobile-phone"></i>
           </h3>
-          <h1 class="responsive" data-compression="12">Viewport Resizer</h1>
+          <h1 class="responsive" data-compression="12" data-max="60">Viewport Resizer</h1>
         </div>
       </div>
       <div class="row">
         <div class="one whole tripple padded">
-          <h1 class="responsive" data-compression="8">Enter URL</h1>
+          <h1 class="responsive" data-compression="8" data-max="30">Enter URL</h1>
           <div class="row">
-            <div class="four mobile fifths">
-              <p><input type="text" name="url" placeholder="http://www.example.com" /></p>
+            <div class="five small-tablet sixths">
+              <input type="url" class="large" autofocus tabindex="1" name="url" placeholder="http://www.example.com" />
             </div>
-            <div class="one mobile fifth pad-left">
-              <p><input type="submit" class="info" value="Go" /></p>
+            <div class="one small-tablet sixth pad-left no-pad-mobile">
+              <button type="submit" class="gap-top-mobile large blue block" tabindex="2"><i class="icon-circle-arrow-right"></i></button>
             </div>
           </div>
           <p><small>Another open-source project by <a href="http://garyhepting.com/">Gary Hepting</a></small></p>
@@ -265,7 +263,27 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
   }
 ?>
   <div id="resizer" class="bounceInDown animated">
+    <div id="address-bar" style="display:none;">
+      <div class="box charcoal relative" style="z-index:1;">
+        <button class="absolute top right large black gapped" data-toggle="#address-bar" style="border:none;padding:0;background:none;line-height:1;"><i class="icon-remove-sign"></i></button>
+        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get">
+          <div class="container">
+            <div class="two thirds centered triple-pad-right-small-tablet pad-left-small-tablet">
+              <div class="row">
+                <div class="four mobile fifths">
+                  <input name="url" type="url" placeholder="http://www.example.com" value="<?php echo $_REQUEST['url'] ?>" />
+                </div>
+                <div class="one mobile fifth pad-left no-pad-left-mobile">
+                  <button type="submit" class="charcoal block"><i class="icon-circle-arrow-right"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
     <ul class="button-group">
+      <li><button class="charcoal" title="Enter URL" data-toggle="#address-bar"><i class="icon-terminal"></i></button></li>
 <?php
 if($iframe_access) {
 ?>
@@ -285,6 +303,10 @@ if($iframe_access) {
 if($iframe_access) {
 ?>
       <li><button class="charcoal" id="closeResizer"><i class="icon-remove"></i></button></li>
+<?php
+}else{
+?>
+      <li><a href="<?php echo $_SERVER['PHP_SELF'] ?>" class="charcoal"><i class="icon-remove"></i></a></li>
 <?php
 }
 ?>
