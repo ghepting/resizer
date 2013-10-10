@@ -13,6 +13,9 @@ function root_url() {
   return $protocol . "://" . $_SERVER['SERVER_NAME'] . $port;
 }
 
+$path = $_SERVER['PHP_SELF'];
+$path = str_replace('index.php','', $path);
+
 function iframe_url() {
   $url = $_REQUEST['url'];
   $url = parse_url($url);
@@ -92,7 +95,7 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
 <?php
 if( !isset($_REQUEST['bookmarked']) && !isset($_COOKIE['bookmarked']) ) {
 ?>
-      <p><a id="bookmarklet" rel="bookmark" href="javascript:document.location='<?php echo root_url(); ?>/?url=' + document.location.href + '&bookmarked=true';" role="button" class="red noicon grab" title="Drag me to bookmarks"><i class="gap-right icon-bookmark"></i><span class="hidden"><?php echo $title[0]; ?> Viewport Resizer</span></a></p>
+      <p><a id="bookmarklet" rel="bookmark" href="javascript:document.location='<?php echo root_url() . $path; ?>?url=' + document.location.href + '&bookmarked=true';" role="button" class="red noicon grab" title="Drag me to bookmarks"><i class="gap-right icon-bookmark"></i><span class="hidden"><?php echo $title[0]; ?> Viewport Resizer</span></a></p>
 <?php
 }
 ?>
@@ -107,7 +110,7 @@ if( !isset($_REQUEST['bookmarked']) && !isset($_COOKIE['bookmarked']) ) {
   if( !isset($_REQUEST['bookmarked']) && !isset($_COOKIE['bookmarked']) ) {
 ?>
   <div id="ribbon-wrapper">
-    <a id="ribbon" rel="bookmark" class="noicon" href="javascript:document.location='<?php echo root_url(); ?>/?url=' + document.location.href + '&bookmarked=true';" class="grab" title="Drag me to bookmarks">
+    <a id="ribbon" rel="bookmark" class="noicon" href="javascript:document.location='<?php echo root_url() . $path; ?>?url=' + document.location.href + '&bookmarked=true';" class="grab" title="Drag me to bookmarks">
       <div class="content museo-slab" title="Drag me to your bookmarks"><span class="hidden"><?php echo $title[0]; ?> Viewport Resizer</span></div>
       <div class="inset"></div>
       <div class="container">
