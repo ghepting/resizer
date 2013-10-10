@@ -68,7 +68,7 @@ a:not(.noicon)[href*="github.com"]:before {
   height: 100%;
   max-height: 100%;
   margin: 0 auto;
-  background: white;
+  background: #fff;
   box-shadow: 0 0 50px #000;
   -webkit-transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
   -moz-transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
@@ -98,12 +98,12 @@ a:not(.noicon)[href*="github.com"]:before {
 
 #resizerFrameWrapper:before {
   content: "\e001";
-  margin-left: -0.7em;
+  margin-left: -0.725em;
 }
 
 #resizerFrameWrapper:after {
   content: "\e000";
-  margin-right: -0.7em;
+  margin-right: -0.725em;
 }
 
 #resizer {
