@@ -1,4 +1,10 @@
 <?php
+session_start();
+
+if( isset($_REQUEST['bookmarked']) ) {
+  setcookie('bookmarked', 'true');
+}
+
 function root_url() {
   $s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : "";
   $sp = strtolower($_SERVER["SERVER_PROTOCOL"]);
@@ -14,6 +20,10 @@ function iframe_url() {
 }
 
 $iframe_access = (root_url() == iframe_url());
+
+$title = Array();
+array_push( $title, 'Flexy' );
+array_push( $title, 'A viewport resizing tool for testing and demonstrating responsive designs.' );
 ?>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -24,235 +34,68 @@ $iframe_access = (root_url() == iframe_url());
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-  <title><?php echo preg_replace('~https?://~i', '', $_REQUEST['url']) ?></title>
+  <title><?php echo join(": ", $title); ?></title>
+  <meta name="description" content="<?php echo $title[1]; ?>">
   <!-- Modernizr -->
-  <script src="http://groundworkcss.github.io/js/libs/modernizr-2.6.2.min.js"></script>
+  <script src="js/libs/modernizr-2.6.2.min.js"></script>
   <!-- jQuery-->
-  <script type="text/javascript" src="http://groundworkcss.github.io/js/libs/jquery-1.10.2.min.js"></script>
-  <!-- framework css -->
+  <script type="text/javascript" src="js/libs/jquery-1.10.2.min.js"></script>
+  <!-- jQuery Cookie -->
+  <script type="text/javascript" src="js/libs/jquery.cookie.js"></script>
+  <!-- groundwork css -->
   <!--[if gt IE 9]><!-->
-  <link type="text/css" rel="stylesheet" href="http://groundworkcss.github.io/css/groundwork.css">
+  <link type="text/css" rel="stylesheet" href="css/groundwork.css">
   <!--<![endif]-->
   <!--[if lte IE 9]>
-  <link type="text/css" rel="stylesheet" href="http://groundworkcss.github.io/css/groundwork-core.css">
-  <link type="text/css" rel="stylesheet" href="http://groundworkcss.github.io/css/groundwork-type.css">
-  <link type="text/css" rel="stylesheet" href="http://groundworkcss.github.io/css/groundwork-ui.css">
-  <link type="text/css" rel="stylesheet" href="http://groundworkcss.github.io/css/groundwork-anim.css">
-  <link type="text/css" rel="stylesheet" href="http://groundworkcss.github.io/css/groundwork-ie.css">
+  <link type="text/css" rel="stylesheet" href="css/groundwork-core.css">
+  <link type="text/css" rel="stylesheet" href="css/groundwork-type.css">
+  <link type="text/css" rel="stylesheet" href="css/groundwork-ui.css">
+  <link type="text/css" rel="stylesheet" href="css/groundwork-anim.css">
+  <link type="text/css" rel="stylesheet" href="css/groundwork-ie.css">
   <![endif]-->
+  <link type="text/css" rel="stylesheet" href="css/resizer.css">
+  <script type="text/javascript" src="js/resizer.js"></script>
 </head>
-  <style type="text/css">
-    html, body {
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      background: #333 url('http://groundworkcss.github.io/images/black_linen_v2.png') center repeat;
-      overflow: hidden;
-      color: #fff;
-    }
-    #resizerFrame {
-      width: 100%;
-      max-width: 100%;
-      height: 100%;
-      max-height: 100%;
-      margin: 0 auto;
-      background: white;
-      box-shadow: 0 0 50px #000;
-      -webkit-transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
-      -moz-transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
-      -ms-transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
-      -o-transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
-      transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
-    }
-    #resizer {
-      text-align: center;
-      line-height: 1;
-    }
-    #resizer ul {
-      font-size: 13px;
-      display: inline-block;
-      margin: -0.2em auto 0.2em;
-      -webkit-filter: drop-shadow(0 1px 5px rgba(0,0,0,.25));
-      -moz-filter: drop-shadow(0 1px 5px rgba(0,0,0,.25));
-      -ms-filter: drop-shadow(0 1px 5px rgba(0,0,0,.25));
-      -o-filter: drop-shadow(0 1px 5px rgba(0,0,0,.25));
-      filter: drop-shadow(0 1px 5px rgba(0,0,0,.25));
-      -ms-transform: translateZ(0);
-      -o-transform: translateZ(0);
-      -moz-transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-    }
-    button.rotate i:before, button[data-rotate] i:before {
-      -webkit-transition: all 0.15s linear;
-      -moz-transition: all 0.15s linear;
-      -ms-transition: all 0.15s linear;
-      -o-transition: all 0.15s linear;
-      transition: all 0.15s linear;
-    }
-    .landscape i:before {
-      -webkit-transform: rotate(-90deg);
-      -moz-transform: rotate(-90deg);
-      -ms-transform: rotate(-90deg);
-      -o-transform: rotate(-90deg);
-      transform: rotate(-90deg);
-    }
-  </style>
-  <script type="text/javascript">
-    function setCookie(name,value,days) {
-      if (days) {
-        var date = new Date();
-        date.setTime(date.getTime()+(days*24*60*60*1000));
-        var expires = "; expires="+date.toGMTString();
-      }
-      else var expires = "";
-      document.cookie = name+"="+value+expires+"; path=/";
-    }
-
-    function readCookie(name) {
-      var nameEQ = name + "=";
-      var ca = document.cookie.split(';');
-      for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-      }
-      return null;
-    }
-
-    function eraseCookie(name) {
-      setCookie(name,"",-1);
-    }
-
-    function basename(str) {
-      var base = new String(str).substring(str.lastIndexOf('/') + 1);
-      if(base.lastIndexOf(".") != -1) {
-        base = base.substring(0, base.lastIndexOf("."));
-      }
-      return base;
-    }
-
-    function updateQueryStringParameter(uri, key, value) {
-      var re = new RegExp("([?|&])" + key + "=.*?(&|$)", "i");
-      separator = uri.indexOf('?') !== -1 ? "&" : "?";
-      var url = window.location.href;
-      if (uri.match(re)) {
-        url = uri.replace(re, '$1' + key + "=" + value + '$2');
-      }
-      else {
-        url = uri + separator + key + "=" + value;
-      }
-      return url;
-    }
-
-    $(document).ready(function() {
-
-      $('body').on('click', 'button[data-viewport-width]', function(e) {
-        if($(this).attr('data-viewport-width') == '100%') {
-          newWidth = '100%';
-        }else{
-          newWidth = $(this).attr('data-viewport-width');
-        }
-        if($(this).attr('data-viewport-height') == '100%') {
-          newHeight = '100%';
-        }else{
-          newHeight = $(this).attr('data-viewport-height');
-        }
-        $('button[data-viewport-width]').removeClass('active');
-        $(this).addClass('active');
-        setCookie('device', $(this).attr('data-device'));
-        // $('#resizerFrame').stop().animate({'max-width': newWidth, 'max-height': newHeight}, 200);
-        $('#resizerFrame').css({'max-width': newWidth, 'max-height': newHeight});
-        e.preventDefault();
-        return false;
-      });
-
-      $('body').on('click', 'button.rotate', function(e) {
-        // $(this).toggleClass('landscape');
-        $('button[data-rotate=true]').each(function() {
-          $(this).toggleClass('landscape');
-          width = $(this).attr('data-viewport-width');
-          height = $(this).attr('data-viewport-height');
-          // shuffle values
-          $(this).attr('data-viewport-width', height);
-          $(this).attr('data-viewport-height', width);
-          if($(this).hasClass('active')) {
-            $(this).trigger('click');
-            if( $(this).hasClass('landscape') ) {
-              setCookie('orientation', 'landscape');
-            }else{
-              eraseCookie('orientation');
-            }
-          }
-        });
-      });
-
-      $('body').on('click', 'button.refresh', function(e) {
-        $(this).find('i[class*="icon-"]').addClass('icon-rotate-360');
-        document.getElementById('resizerFrame').contentWindow.location.reload();
-      });
-
-      $('body').on('click', '#closeResizer', function(e) {
-        newWidth = $(window).width();
-        newHeight = $(window).height();
-        $('button[data-viewport-width]').removeClass('active');
-        // $('#resizerFrame').stop().animate({'max-width': newWidth, 'max-height': newHeight}, 200);
-        $('#resizerFrame').css({'max-width': newWidth, 'max-height': newHeight});
-        $('#resizer').fadeOut(500, function() {
-          document.location = document.getElementById("resizerFrame").contentWindow.location.href;
-        });
-        e.preventDefault();
-        return false;
-      });
-
-      $('body').on('click', '[data-toggle="#address-bar"]', function(e) {
-        $($(this).attr('data-toggle')).slideToggle();
-      });
-
-      if( readCookie('device') ) {
-        $('[data-device="'+readCookie('device')+'"]').trigger('click');
-      }
-      if( readCookie('orientation') == 'landscape' ) {
-        $('.rotate').trigger('click');
-      }
-
-      var iframe = document.getElementById('resizerFrame');
-      var origin = window.location.protocol + '//' + window.location.host;
-      if( origin =='<?php echo $root_url ?>' ) {
-
-      }
-    });
-  </script>
 <?php
 if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
 ?>
   <div class="container">
-    <form action="<?php $_SERVER['PHP_SELF']?>" method="get">
+    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="get">
       <div class="row">
-        <div class="one whole tripple padded">
-          <h3 class="responsive" data-compression="4.3">
+        <div class="one whole triple-padded">
+          <h1 class="responsive" data-compression="4.3" data-min="60" data-max="150">
             <i class="icon-desktop"></i> 
             <i class="icon-laptop"></i> 
             <i class="icon-tablet"></i> 
             <i class="icon-mobile-phone"></i>
-          </h3>
-          <h1 class="responsive" data-compression="12" data-max="60">Viewport Resizer</h1>
+          </h1>
+          <h1 class="museo-slab responsive" data-compression="12" data-min="30" data-max="50"><?php echo $title[0]; ?></h1>
+          <h3 class="museo-slab"><?php echo $title[1]; ?></h3>
         </div>
       </div>
       <div class="row">
-        <div class="one whole tripple padded">
-          <h1 class="responsive" data-compression="8" data-max="30">Enter URL</h1>
-          <div class="row">
-            <div class="five small-tablet sixths">
-              <input type="url" class="large" autofocus tabindex="1" name="url" placeholder="http://www.example.com" />
+        <div class="six sevenths centered triple-padded">
+          <h5 class="source-sans-pro responsive" data-compression="15" data-min="20" data-max="30">Enter URL</h5>
+          <div class="flex-wrapper">
+            <div class="pad-right" style="line-height:1.2;">
+              <label for="url" class="zero"><i class="icon-globe icon-3x"></i></label>
             </div>
-            <div class="one small-tablet sixth pad-left no-pad-mobile">
-              <button type="submit" class="gap-top-mobile large blue block" tabindex="2"><i class="icon-circle-arrow-right"></i></button>
+            <div class="flex-box">
+              <input type="text" class="large" autofocus tabindex="1" id="url" name="url" placeholder="http://www.example.com" />
+            </div>
+            <div class="pad-left">
+              <button type="submit" class="black" tabindex="2" style="line-height:1.2;padding:0;border:0;background:none;"><i class="icon-circle-arrow-right icon-3x"></i></button>
             </div>
           </div>
-          <p><small>Another open-source project by <a href="http://garyhepting.com/">Gary Hepting</a></small></p>
         </div>
       </div>
+<?php
+if( !isset($_REQUEST['bookmarked']) && !isset($_COOKIE['bookmarked']) ) {
+?>
+      <p><a id="bookmarklet" rel="bookmark" href="javascript:document.location='<?php echo root_url(); ?>/?url=' + document.location.href + '&bookmarked=true';" role="button" class="red noicon grab" title="Drag me to bookmarks"><i class="gap-right icon-bookmark"></i><span class="hidden"><?php echo $title[0]; ?> Viewport Resizer</span></a></p>
+<?php
+}
+?>
     </form>
   </div>
 <?php
@@ -261,27 +104,45 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
   if (!preg_match("~https?://~i", $url)) {
     $url = "http://" . $url;
   }
+  if( !isset($_REQUEST['bookmarked']) && !isset($_COOKIE['bookmarked']) ) {
 ?>
-  <div id="resizer" class="bounceInDown animated">
-    <div id="address-bar" style="display:none;">
-      <div class="box charcoal relative" style="z-index:1;">
-        <button class="absolute top right large black gapped" data-toggle="#address-bar" style="border:none;padding:0;background:none;line-height:1;"><i class="icon-remove-sign"></i></button>
-        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get">
-          <div class="container">
-            <div class="two thirds centered triple-pad-right-small-tablet pad-left-small-tablet">
-              <div class="row">
-                <div class="four mobile fifths">
-                  <input name="url" type="url" placeholder="http://www.example.com" value="<?php echo $_REQUEST['url'] ?>" />
-                </div>
-                <div class="one mobile fifth pad-left no-pad-left-mobile">
-                  <button type="submit" class="charcoal block"><i class="icon-circle-arrow-right"></i></button>
-                </div>
+  <div id="ribbon-wrapper">
+    <a id="ribbon" rel="bookmark" class="noicon" href="javascript:document.location='<?php echo root_url(); ?>/?url=' + document.location.href + '&bookmarked=true';" class="grab" title="Drag me to bookmarks">
+      <div class="content museo-slab" title="Drag me to your bookmarks"><span class="hidden"><?php echo $title[0]; ?> Viewport Resizer</span></div>
+      <div class="inset"></div>
+      <div class="container">
+        <div class="base"></div>
+        <div class="end"></div>
+      </div>
+    </a>
+  </div>
+<?php
+  }
+?>
+  <div id="address-bar" style="display:none;">
+    <div class="square box charcoal relative" style="z-index:1;">
+      <a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="absolute top left black gapped" style="border:none;padding:0;background:none;line-height:1.2;text-decoration:none;"><i class="icon-home icon-2x"></i></a>
+      <button data-toggle="#address-bar" class="absolute top right black gapped" style="border:none;padding:0;background:none;line-height:1.2;"><i class="icon-remove-sign icon-2x"></i></button>
+      <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
+        <div class="small-container">
+          <div class="triple-pad-right triple-pad-left">
+            <div class="flex-wrapper">
+              <div class="pad-right" style="line-height:1.2;">
+                <label for="url" class="zero"><i class="icon-globe icon-2x"></i></label>
+              </div>
+              <div class="flex-box">
+                <input name="url" type="text" id="url" placeholder="http://www.example.com" value="<?php echo $_REQUEST['url']; ?>" />
+              </div>
+              <div class="pad-left no-pad-left-mobile">
+                <button type="submit" class="black" style="line-height:1.2;padding:0;border:0;background:none;"><i class="icon-circle-arrow-right icon-2x"></i></button>
               </div>
             </div>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
+  </div>
+  <div id="resizer" class="bounceInDown animated">
     <ul class="button-group">
       <li><button class="charcoal" title="Enter URL" data-toggle="#address-bar"><i class="icon-terminal"></i></button></li>
 <?php
@@ -291,13 +152,13 @@ if($iframe_access) {
 <?php
 }
 ?>
-      <li><button class="charcoal desktop-only" title="Fullscreen" data-device="fullscreen" data-viewport-width="100%" data-viewport-height="100%"><i class="icon-fullscreen"></i></button></li>
-      <li><button class="charcoal desktop-only" title="Desktop" data-device="desktop" data-viewport-width="1920px" data-viewport-height="1080px"><i class="icon-desktop"></i></button></li>
-      <li><button class="charcoal desktop-only" title="13 &#39; MacBook Pro" data-device="macbook" data-viewport-width="1280px" data-viewport-height="800px"><i class="icon-laptop"></i></button></li>
-      <li><button class="charcoal hide-on-small-tablet hide-on-mobile" data-device="ipad" title="iPad" data-rotate="true" data-viewport-width="768px" data-viewport-height="1024px"><i class="icon-tablet"></i></button></li>
-      <li><button class="charcoal hide-on-mobile" title="Android Tablet" data-device="tablet" data-rotate="true" data-viewport-width="720px" data-viewport-height="1280px"><i class="android icon-tablet"></i></button></li>
-      <li><button class="charcoal" title="Android Phone" data-rotate="true" data-device="android" data-viewport-width="480px" data-viewport-height="720px"><i class="android icon-mobile-phone"></i></button></li>
-      <li><button class="charcoal" title="iPhone" data-rotate="true" data-device="iphone" data-viewport-width="320px" data-viewport-height="640px"><i class="icon-mobile-phone"></i></button></li>
+      <li><button class="charcoal desktop-only" title="Fullscreen" data-device="fullscreen" data-viewport-width="100%" data-viewport-height="100%" data-user-agent=""><i class="icon-fullscreen"></i></button></li>
+      <li><button class="charcoal desktop-only" title="Desktop" data-device="desktop" data-viewport-width="1920px" data-viewport-height="1080px" data-user-agent=""><i class="icon-desktop"></i></button></li>
+      <li><button class="charcoal desktop-only" title="13 &#39; MacBook Pro" data-device="macbook" data-viewport-width="1280px" data-viewport-height="800px" data-user-agent=""><i class="icon-laptop"></i></button></li>
+      <li><button class="charcoal hide-on-small-tablet hide-on-mobile" data-device="ipad" title="iPad" data-rotate="true" data-viewport-width="768px" data-viewport-height="1024px" data-user-agent="Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25"><i class="icon-tablet"></i></button></li>
+      <li><button class="charcoal hide-on-mobile" title="Android Tablet" data-device="tablet" data-rotate="true" data-viewport-width="720px" data-viewport-height="1280px" data-user-agent="Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"><i class="android icon-tablet"></i></button></li>
+      <li><button class="charcoal" title="Android Phone" data-rotate="true" data-device="android" data-viewport-width="480px" data-viewport-height="720px" data-user-agent="Mozilla/5.0 (Linux; U; Android 2.3.6; en-us; Nexus S Build/GRK39F) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"><i class="android icon-mobile-phone"></i></button></li>
+      <li><button class="charcoal" title="iPhone" data-rotate="true" data-device="iphone" data-viewport-width="320px" data-viewport-height="640px" data-user-agent="Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25"><i class="icon-mobile-phone"></i></button></li>
       <li><button class="charcoal rotate" data-rotate="true" title="Toggle Landscape/Portrait"><i class="icon-rotate-left"></i></button></li>
 <?php
 if($iframe_access) {
@@ -306,18 +167,19 @@ if($iframe_access) {
 <?php
 }else{
 ?>
-      <li><a href="<?php echo $_SERVER['PHP_SELF'] ?>" class="charcoal"><i class="icon-remove"></i></a></li>
+      <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="charcoal"><i class="icon-remove"></i></a></li>
 <?php
 }
 ?>
     </ul>
   </div>
-  <iframe id="resizerFrame" src="<?php echo $url ?>" frameborder="0"></iframe>
+  <iframe id="resizerFrame" class="relative" style="z-index:1;" src="<?php echo $url; ?>" frameborder="0"></iframe>
 <?php
 }
 ?>
+  <p class="fixed left right bottom align-center" style="z-index:0;"><small>Another open-source project by <a href="http://garyhepting.com/">Gary Hepting</a></small></p>
   <!-- scripts -->
-  <script type="text/javascript" src="http://groundworkcss.github.io/js/groundwork.all.js"></script>
+  <script type="text/javascript" src="js/groundwork.all.js"></script>
 
   <!-- google analytics -->
   <script type="text/javascript">
