@@ -56,6 +56,7 @@ array_push( $title, 'A viewport resizing tool for testing and demonstrating resp
   <link type="text/css" rel="stylesheet" href="css/groundwork-anim.css">
   <link type="text/css" rel="stylesheet" href="css/groundwork-ie.css">
   <![endif]-->
+  <link href="http://fonts.googleapis.com/css?family=Gorditas:400,700" rel="stylesheet" type="text/css">
   <link type="text/css" rel="stylesheet" href="css/resizer.css">
   <script type="text/javascript" src="js/resizer.js"></script>
 </head>
@@ -74,6 +75,7 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
           </h1>
           <h1 class="logo quicksand responsive" data-compression="12" data-min="30" data-max="95"><i class="icon-strong-arm-left"></i><?php echo $title[0]; ?><i class="icon-strong-arm-right"></i></h1>
           <h3 class="museo-slab"><?php echo $title[1]; ?></h3>
+          <p></p>
         </div>
       </div>
       <div class="row">
@@ -95,7 +97,11 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
 <?php
 if( !isset($_REQUEST['bookmarked']) && !isset($_COOKIE['bookmarked']) ) {
 ?>
-      <p><a id="bookmarklet" rel="bookmark" href="javascript:document.location='<?php echo root_url() . $path; ?>?url=' + document.location.href + '&bookmarked=true';" role="button" class="red noicon grab" title="Drag me to bookmarks"><i class="gap-right icon-bookmark"></i><span class="hidden"><?php echo $title[0]; ?> Viewport Resizer</span></a></p>
+      <p>
+        <a id="bookmarklet" class="red grab" rel="bookmark" role="button" href="javascript:document.location='<?php echo root_url() . $path; ?>?url=' + document.location.href + '&bookmarked=true';" title="Drag me to bookmarks"><span class="hidden"><?php echo $title[0]; ?> Viewport Resizer</span></a>
+        &nbsp;
+        <a class="red" role="button" href="https://github.com/ghepting/resizer" title="Another open-source project by @ghepting" target="_blank">Github Project<span class="gap-left border-left pad-left small">v2.0.3</span></a>
+      </p>
 <?php
 }
 ?>
@@ -180,7 +186,7 @@ if($iframe_access) {
 <?php
 }
 ?>
-  <p class="fixed left right bottom align-center" style="z-index:0;"><small>Another open-source project by <a href="http://garyhepting.com/">Gary Hepting</a></small></p>
+  <p class="small fixed left right bottom align-center" style="z-index:0;">Another open-source project by <a href="http://garyhepting.com/">Gary Hepting</a></p>
   <!-- scripts -->
   <script type="text/javascript" src="js/groundwork.all.js"></script>
 

@@ -49,6 +49,14 @@ html, body {
   color: #fff;
 }
 
+a, a:visited {
+  color: inherit;
+}
+
+a:not(.noicon)[href*="github.com"]:before {
+  color: inherit;
+}
+
 .small-container {
   max-width: 52em;
   margin: 0 auto;
@@ -92,14 +100,14 @@ html, body {
 
 .logo {
   line-height: 1.5;
-  text-transform: lowercase;
+  text-transform: uppercase;
   font-weight: bold;
+  font-family: 'Gorditas', Verdana, 'museo-slab', Helvetica, Arial, sans-serif;
 }
 
 .logo i {
   position: relative;
-  top: -0.1em;
-  margin: 0 0.1em;
+  top: -0.15em;
 }
 
 button.rotate i:before, button[data-rotate] i:before {
@@ -147,11 +155,18 @@ button.rotate i:before, button[data-rotate] i:before {
 }
 
 input[type="text"] {
-  transition: background 500ms;
+  transition: background 500ms, border 500ms;
+  border: 1px solid #5a5a5a;
 }
 
 input[type="text"]:focus {
-  background: #FDF8EC;
+  outline: 0;
+  border-color: #29b765;
+}
+
+a[role="button"] {
+  font-family: "museo-slab", "source-sans-pro", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 #bookmarklet, #bookmarkletPin {
