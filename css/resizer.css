@@ -77,6 +77,35 @@ a:not(.noicon)[href*="github.com"]:before {
   transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
 }
 
+#resizerFrameWrapper {
+  position: relative;
+  height: 100%;
+}
+
+#resizerFrameWrapper:before, #resizerFrameWrapper:after {
+  font-family: 'flexy';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  font-size: 8em;
+  position: absolute;
+  top: 1em;
+}
+
+#resizerFrameWrapper:before {
+  content: "\e001";
+  margin-left: -0.7em;
+}
+
+#resizerFrameWrapper:after {
+  content: "\e000";
+  margin-right: -0.7em;
+}
+
 #resizer {
   text-align: center;
   line-height: 1;

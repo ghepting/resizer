@@ -100,7 +100,7 @@ if( !isset($_REQUEST['bookmarked']) && !isset($_COOKIE['bookmarked']) ) {
       <p>
         <a id="bookmarklet" class="red grab" rel="bookmark" role="button" href="javascript:document.location='<?php echo root_url() . $path; ?>?url=' + document.location.href + '&bookmarked=true';" title="Drag me to bookmarks"><span class="hidden"><?php echo $title[0]; ?> Viewport Resizer</span></a>
         &nbsp;
-        <a class="red" role="button" href="https://github.com/ghepting/resizer" title="Another open-source project by @ghepting" target="_blank">Github Project<span class="gap-left border-left pad-left small">v2.0.3</span></a>
+        <a class="red" role="button" href="https://github.com/ghepting/resizer" title="Another open-source project by @ghepting" target="_blank">Github Project<span class="gap-left border-left pad-left small">v2.0.4</span></a>
       </p>
 <?php
 }
@@ -182,7 +182,9 @@ if($iframe_access) {
 ?>
     </ul>
   </div>
-  <iframe id="resizerFrame" class="relative" style="z-index:1;" src="<?php echo $url; ?>" frameborder="0"></iframe>
+  <div id="resizerFrameWrapper">
+    <iframe id="resizerFrame" class="relative" style="z-index:1;" src="<?php echo $url; ?>" frameborder="0"></iframe>
+  </div>
 <?php
 }
 ?>
