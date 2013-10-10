@@ -69,7 +69,7 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
             <i class="icon-tablet"></i> 
             <i class="icon-mobile-phone"></i>
           </h1>
-          <h1 class="museo-slab responsive" data-compression="12" data-min="30" data-max="50"><?php echo $title[0]; ?></h1>
+          <h1 class="logo quicksand responsive" data-compression="12" data-min="30" data-max="95"><i class="icon-strong-arm-left"></i><?php echo $title[0]; ?><i class="icon-strong-arm-right"></i></h1>
           <h3 class="museo-slab"><?php echo $title[1]; ?></h3>
         </div>
       </div>
