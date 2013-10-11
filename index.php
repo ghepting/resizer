@@ -73,7 +73,7 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
             <i class="icon-tablet"></i> 
             <i class="icon-mobile-phone"></i>
           </h1>
-          <h1 class="logo quicksand responsive" data-compression="12" data-min="30" data-max="95"><i class="icon-strong-arm-left"></i><?php echo $title[0]; ?><i class="icon-strong-arm-right"></i></h1>
+          <h1 class="logo quicksand responsive" data-compression="5" data-min="52" data-max="95"><i class="icon-strong-arm-left"></i><?php echo $title[0]; ?><i class="icon-strong-arm-right"></i></h1>
           <h3 class="museo-slab"><?php echo $title[1]; ?></h3>
           <p></p>
         </div>
@@ -97,11 +97,14 @@ if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])) {
 <?php
 if( !isset($_REQUEST['bookmarked']) && !isset($_COOKIE['bookmarked']) ) {
 ?>
-      <p>
-        <a id="bookmarklet" class="red grab" rel="bookmark" role="button" href="javascript:document.location='<?php echo root_url() . $path; ?>?url=' + document.location.href + '&bookmarked=true';" title="Drag me to bookmarks"><span class="hidden"><?php echo $title[0]; ?> Viewport Resizer</span></a>
-        &nbsp;
-        <a class="red" role="button" href="https://github.com/ghepting/resizer" title="Another open-source project by @ghepting" target="_blank">Github Project<span class="gap-left border-left pad-left small">v2.0.4</span></a>
-      </p>
+      <div class="row">
+        <div class="one small-tablet half pad-left pad-right align-right align-center-mobile">
+          <a id="bookmarklet" class="red grab block-mobile" rel="bookmark" role="button" href="javascript:document.location='<?php echo root_url() . $path; ?>?url=' + document.location.href + '&bookmarked=true';" title="Drag me to bookmarks"><span class="hidden"><?php echo $title[0]; ?> Viewport Resizer</span></a>
+        </div>
+        <div class="one small-tablet half pad-left pad-right align-left align-center-mobile pad-top-mobile">
+          <a class="red block-mobile" role="button" href="https://github.com/ghepting/resizer" title="Another open-source project by @ghepting" target="_blank">Github Project<span class="gap-left border-left pad-left small">v2.0.5</span></a>
+        </div>
+      </div>
 <?php
 }
 ?>
@@ -188,7 +191,7 @@ if($iframe_access) {
 <?php
 }
 ?>
-  <p class="small fixed left right bottom align-center" style="z-index:0;">Another open-source project by <a href="http://garyhepting.com/">Gary Hepting</a></p>
+  <p class="museo-slab fixed left right bottom align-center" style="z-index:0;">Another open-source project by <a href="http://garyhepting.com/" target="_blank">Gary Hepting</a></p>
   <!-- scripts -->
   <script type="text/javascript" src="js/groundwork.all.js"></script>
 

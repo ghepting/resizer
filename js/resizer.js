@@ -130,6 +130,14 @@ $(document).ready(function() {
     return false;
   });
 
+  $('form').on('submit', function(e) {
+    if($(this).find('url').val() == '') {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  });
+
   if( $.cookie('device') ) {
     $('[data-device="'+$.cookie('device')+'"]').trigger('click');
   }

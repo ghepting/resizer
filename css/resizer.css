@@ -175,8 +175,8 @@ button.rotate i:before, button[data-rotate] i:before {
   [data-min="60"] {
     font-size: 60px;
   }
-  [data-min="30"] {
-    font-size: 30px;
+  [data-min="52"] {
+    font-size: 52px;
   }
   [data-min="20"] {
     font-size: 20px;
