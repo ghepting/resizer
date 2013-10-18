@@ -127,6 +127,9 @@ $(document).ready(function() {
       case 55:
         $('[data-device="iphone"]').trigger('click');
         break;
+      case 32:
+        $('.rotate').trigger('click');
+        break;
     }
   });
 
