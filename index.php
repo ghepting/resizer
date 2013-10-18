@@ -184,11 +184,11 @@ if($iframe_access) {
 <?php
 if($iframe_access) {
 ?>
-      <li><button class="charcoal" id="closeResizer"><i class="icon-remove"></i></button></li>
+      <li><button class="close charcoal" id="closeResizer"><i class="icon-remove"></i></button></li>
 <?php
 }else{
 ?>
-      <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="charcoal"><i class="icon-remove"></i></a></li>
+      <li><a class="close charcoal" href="<?php echo $_SERVER['PHP_SELF']; ?>"><i class="icon-remove"></i></a></li>
 <?php
 }
 ?>

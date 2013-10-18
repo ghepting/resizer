@@ -79,7 +79,15 @@ $(document).ready(function() {
     document.getElementById('resizerFrame').contentWindow.location.reload();
   });
 
-  $('body').on('click', '#closeResizer', function(e) {
+  var triggerClose = function() {
+    if($('#closeResizer').length) {
+      closeResizer();
+    }else{
+      document.location = $('.close').attr('href');
+    }
+  };
+
+  var closeResizer = function() {
     newWidth = $(window).width();
     newHeight = $(window).height();
     $('button[data-viewport-width]').removeClass('asphalt active').addClass('charcoal');
@@ -90,6 +98,10 @@ $(document).ready(function() {
     $('#resizer').fadeOut(500, function() {
       document.location = document.getElementById("resizerFrame").contentWindow.location.href;
     });
+  }
+
+  $('body').on('click', '#closeResizer', function(e) {
+    closeResizer();
   });
 
   $('body').on('click', '[data-toggle]', function(e) {
@@ -128,7 +140,12 @@ $(document).ready(function() {
         $('[data-device="iphone"]').trigger('click');
         break;
       case 32:
+      case 56:
+      case 82:
         $('.rotate').trigger('click');
+        break;
+      case 88:
+        triggerClose();
         break;
     }
   });
