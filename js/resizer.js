@@ -137,8 +137,8 @@ $(document).ready(function() {
     if(e.keyCode == 27) {
       $('[data-toggle]').first().trigger('click');
       $('#url').val(window.resizer.url);
-      e.stopPropagation();
     }
+    e.stopPropagation();
   });
 
   $('body').on('keypress', '#url', function(e) {
