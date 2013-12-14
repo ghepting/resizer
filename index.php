@@ -114,7 +114,7 @@ if( !isset($_REQUEST['bookmarked']) && !isset($_COOKIE['bookmarked']) ) {
 <?php
 }
 ?>
-          <a class="red block-mobile" role="button" href="https://github.com/ghepting/resizer" title="Another open-source project by @ghepting" target="_blank">Github Project<span class="gap-left border-left pad-left small">v2.0.6</span></a>
+          <a class="red block-mobile" role="button" href="https://github.com/ghepting/resizer" title="Another open-source project by @ghepting" target="_blank">Github Project<span class="gap-left border-left pad-left small">v2.1.6</span></a>
         </div>
       </div>
     </form>
