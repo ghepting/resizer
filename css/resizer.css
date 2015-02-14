@@ -49,6 +49,9 @@ html, body {
   color: #fff;
 }
 
+.index-page { display: block; }
+.resizer-page { display: none; height: 100%; }
+
 a, a:visited {
   color: inherit;
 }

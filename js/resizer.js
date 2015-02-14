@@ -21,7 +21,7 @@ function createBookmarklet() {
     window.sidebar.addPanel(title,address);
   } else if(window.external) {
     window.external.AddFavorite(address,title);
-  } else if(window.opera && window.print) { 
+  } else if(window.opera && window.print) {
     var elem = document.createElement('a');
     elem.setAttribute('href',address);
     elem.setAttribute('title',title);
@@ -30,9 +30,32 @@ function createBookmarklet() {
   }
 }
 
+function setupBookmarkLinks() {
+  $('[rel="bookmark"]').attr('href', "javascript:document.location='"+document.location+"?url=' + document.location.href;");
+}
+
+function getParameterByName(name) {
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.search);
+  return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
 $(document).ready(function() {
 
-  window.resizer.url = $('#url').val();
+  setupBookmarkLinks();
+
+  if(getParameterByName('url').length > 0) {
+    urlParam = getParameterByName('url');
+    if(urlParam.substr(0,4) != 'http') {
+      urlParam = 'http://' + urlParam;
+    }
+    window.resizer.url = urlParam;
+    $('[name="url"]').val(window.resizer.url);
+    $('iframe#resizerFrame').attr('src',window.resizer.url);
+    $('.index-page').hide();
+    $('.resizer-page').show();
+  }
 
   $('body').on('click', 'button[data-viewport-width]', function(e) {
     if($(this).attr('data-viewport-width') == '100%') {
@@ -108,7 +131,7 @@ $(document).ready(function() {
     var $el = $($(this).attr('data-toggle'));
     $el.slideToggle(150, function() {
       if($el.is(':visible')) {
-        $el.find('#url').focus();
+        $el.find('[name="url"]').focus().select();
       }
     });
   });
@@ -153,19 +176,19 @@ $(document).ready(function() {
   $('body').on('keyup', 'input', function(e) {
     if(e.keyCode == 27) {
       $('[data-toggle]').first().trigger('click');
-      $('#url').val(window.resizer.url);
+      $('[name="url"]').val(window.resizer.url);
     }
     e.stopPropagation();
   });
 
-  $('body').on('keypress', '#url', function(e) {
+  $('body').on('keypress', '[name="url"]', function(e) {
     if(e.keyCode == 13) {
       window.resizer.ensureValidProtocol($(this), e);
     }
   });
 
   $('body').on('click', 'button[type="submit"]', function(e) {
-    window.resizer.ensureValidProtocol($(this).parents('form').find('#url'), e);
+    window.resizer.ensureValidProtocol($(this).parents('form').find('[name="url"]'), e);
   });
 
   $('body').on('click', '[rel="bookmark"]', function(e) {
