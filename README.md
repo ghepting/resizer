@@ -1,8 +1,7 @@
-Flexy [@flexyresizer](http://twitter.com/flexyresizer)
+Flexy Resizer
 ----
 
 A viewport resizing tool for testing and demonstrating responsive
-designs by [@ghepting](https://twitter.com/ghepting)
+designs by [@ghepting](https://github.com/ghepting)
 
-Check it out at [http://garyhepting.com/resizer/](http://garyhepting.com/resizer)
-
+Check it out at [http://ghepting.com/resizer/](http://ghepting.com/resizer)
