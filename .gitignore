@@ -1,1 +1,2 @@
-resources/*
+resources/
+node_modules/
